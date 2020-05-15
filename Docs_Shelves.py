@@ -169,6 +169,19 @@ def add_new_shelf (shelf_number):
         print(f'Полка с номером {shelf_number} успешно создана')
         print()
 
+def person_lookup():
+    '''
+    lp - look person - выводит имена всех владельцев документов из базы
+    '''
+    i = 0
+    for docs in directories.values():
+        for item in docs:
+            if item == documents[i]['number']:
+                print(f'Документ {documents[i]["number"]} принадлежит {documents[i]["name"]}')
+                i += 1
+            else:
+                print("Документ не имеет владельца")
+
 def main():
     while True:
         user_input = input(
@@ -176,6 +189,7 @@ def main():
             'p - для поиска пользователя по номеру документа,\n '
             's - для поиска полки по номеру документа, \n '
             'l - вывод всех документов,\n '
+            'lp - выводит имена всех владельцев документов из базы, \n'
             'a - для добавления новых данных, \n '
             'd - для удаления документа из каталога и перечня полок по номеру, \n '
             'm - для перемещения между полками \n '
@@ -196,6 +210,8 @@ def main():
             move_document_by_number(directories)
         elif user_input == 'as':
             add_new_shelf(directories)
+        elif user_input == 'lp':
+            person_lookup()
         elif user_input == 'q':
             break
 
