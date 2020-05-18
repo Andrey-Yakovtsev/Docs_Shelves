@@ -44,6 +44,7 @@ def move_document_by_number(document):
         print("Такой полки не существует.Проверьте правильность ввода и повторите")
         print()
         move_document_by_number(directories)
+
     else:
         for keys, values in directories.items():
             try:
@@ -152,7 +153,17 @@ def doc_delete_by_number(document):
         for dict in documents:
             if dict["number"] == str(doc_number):
                 print(f'Удален документ {dict["name"]}')
+                print()
                 documents.remove(dict)
+
+    i = 0
+    for docs in directories.values():
+        for item in docs:
+            if item == documents[i]['number']:
+                docs.remove(item)
+                i += 1
+    pprint(f' Проверяем оставшийся список документов {documents}')
+
 
 def add_new_shelf (shelf_number):
     '''
@@ -160,9 +171,18 @@ def add_new_shelf (shelf_number):
     Предусмотрите случай, когда пользователь добавляет полку, которая уже существует.;
     '''
     shelves_count = len(directories)
-    shelf_number = input(f'Для добавления полки введите номер за пределеами значений от 1 до {shelves_count}: ')
+    shelf_number = input(f'Для добавления полки введите следующий порядковый'
+                         f' номер за пределеами значений от 1 до {shelves_count}: ')
     if 1 <= int(shelf_number) <= shelves_count:
         print("Такая полка уже существует. Проверьте правильность ввода")
+        add_new_shelf(directories)
+    elif int(shelf_number) > (shelves_count + 1):
+        print(f'Номер новой полки не соответствует порядку. '
+              f'Введите следующий порядковый. Подсказка: {shelves_count + 1}')
+        add_new_shelf(directories)
+    elif int(shelf_number) < 1:
+        print(f'Номер новой полки не соответствует порядку. '
+              f'Введите следующий порядковый. Подсказка: {shelves_count + 1}')
         add_new_shelf(directories)
     else:
         directories.update({shelf_number:[]})
