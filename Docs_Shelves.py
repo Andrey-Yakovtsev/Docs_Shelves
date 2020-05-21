@@ -1,4 +1,3 @@
-
 from pprint import pprint
 
 documents = [
@@ -14,34 +13,28 @@ directories = {
 }
 
 
-
 def move_document_by_number(document):
     '''
      m – move – команда, которая спросит номер документа и целевую полку
      и переместит его с текущей полки на целевую.
      '''
     shelves_count = len(directories)
-    # Запускаем функцию поиска номера полки по документу
     doc_number = input('Введите номер документа, который надо переместить: ')
-    docs_list = []
-    for dict in documents:
-        docs_list.append(dict.get("number"))
 
-    if not doc_number in docs_list:
+    for item in documents:
+        if item['number'] == doc_number:
+            for keys, values in directories.items():
+                if values.count(str(doc_number)) != 0:
+                    print(f'Нашел документ на полке {keys}')
+                    break
+            break
+    else:
         print("Документа с указанным номером не существует. Проверьте правильность ввода и повторите")
         shevles_finder_by_number(directories)
-    else:
-        for keys, values in directories.items():
-            for number in values:
-                if number == doc_number:
-                    print()
-                    print(f'Документ находится на полке: {keys}')
-                    print()
-                    break
 
     shelf_number = int(input(f'Введите номер полки на которую перемещаем цифрой (от 1 до {shelves_count}):'))
     if not 1 <= int(shelf_number) <= shelves_count:
-        print("Такой полки не существует.Проверьте правильность ввода и повторите")
+        print("Такой полки не существует. Проверьте правильность ввода и повторите")
         print()
         move_document_by_number(directories)
 
@@ -56,7 +49,6 @@ def move_document_by_number(document):
                 print(f'Документ стоит на {int(shelf_number)} полке. Проверяем:')
                 pprint(directories.items())
                 break
-
 
 
 def doc_finder_by_number(document):
@@ -75,14 +67,15 @@ def doc_finder_by_number(document):
         print()
         doc_finder_by_number(documents)
 
+
 def shevles_finder_by_number(document):
     '''
    s - поиск полки по номеру документа.
     '''
     doc_number = input('Для определения полки введите номер документа: ')
     docs_list = []
-    for dict in documents:
-        docs_list.append(dict.get("number"))
+    for item in documents:
+        docs_list.append(item.get("number"))
 
     if not doc_number in docs_list:
         print("Документа с указанным номером не существует. Проверьте правильность ввода и повторите")
@@ -121,7 +114,7 @@ def add_new_doc(new_dict_in_documents):
     documents.append(newdict)
     print(f' Вы добавили в архив новый документ со значениями:'
           f' "number" = {doc_number}, "type" = {doc_type}, "name" = {user_name}. '
-            f'В базе это выглядит так:')
+          f'В базе это выглядит так:')
     pprint(documents[-1])
 
     def check_shelf(shelf_number):
@@ -142,32 +135,33 @@ def doc_delete_by_number(document):
     # d - для удаления пользователя по номеру документа
     '''
     docs_list = []
-    for dict in documents:
-        docs_list.append(dict.get("number"))
+    for item in documents:
+        docs_list.append(item.get("number"))
 
     doc_number = input('Для удаления документа введите его номер: ')
     if not doc_number in docs_list:
         print("Документа с указанным номером не существует. Проверьте правильность ввода и повторите")
-        doc_delete_by_number(directories)
+
     else:
-        for dict in documents:
-            if dict["number"] == str(doc_number):
-                print(f'Удален документ {dict["name"]}')
+        for docs in documents:
+            if docs["number"] == str(doc_number):
+                print(f'Удален документ {docs["name"]}')
                 print()
-                documents.remove(dict)
+                documents.remove(docs)
 
-    i = 0
-    for docs in directories.values():
-        for item in docs:
-            if item == documents[i]['number']:
-                docs.remove(item)
-                i += 1
-    pprint(f' Проверяем оставшийся список документов {documents}')
+        for docums in directories.values():
+            i = 0
+            for item in docums:
+                if item == doc_number:
+                    docums.remove(item)
+                    i += 1
+        pprint(f' Проверяем оставшийся список документов {documents}')
+        pprint(f' Проверяем оставшийся список директорий {directories}')
 
 
-def add_new_shelf (shelf_number):
+def add_new_shelf(shelf_number):
     '''
-    # as – add shelf – команда, которая спросит номер новой полки и добавит ее в перечень. 
+    # as – add shelf – команда, которая спросит номер новой полки и добавит ее в перечень.
     Предусмотрите случай, когда пользователь добавляет полку, которая уже существует.;
     '''
     shelves_count = len(directories)
@@ -185,9 +179,10 @@ def add_new_shelf (shelf_number):
               f'Введите следующий порядковый. Подсказка: {shelves_count + 1}')
         add_new_shelf(directories)
     else:
-        directories.update({shelf_number:[]})
+        directories.update({shelf_number: []})
         print(f'Полка с номером {shelf_number} успешно создана')
         print()
+
 
 def person_lookup():
     '''
@@ -201,6 +196,7 @@ def person_lookup():
                 i += 1
             else:
                 print("Документ не имеет владельца")
+
 
 def main():
     while True:
